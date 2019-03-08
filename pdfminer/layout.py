@@ -682,22 +682,7 @@ class LTLayoutContainer(LTContainer):
         (empties, textlines) = fsplit(lambda obj: obj.is_empty(), textlines)
         for obj in empties:
             obj.analyze(laparams)
-        textboxes = list(self.group_textlines(laparams, textlines))
-        if -1 <= laparams.boxes_flow and laparams.boxes_flow <= +1 and textboxes:
-            self.groups = self.group_textboxes(laparams, textboxes)
-            assigner = IndexAssigner()
-            for group in self.groups:
-                group.analyze(laparams)
-                assigner.run(group)
-            textboxes.sort(key=lambda box: box.index)
-        else:
-            def getkey(box):
-                if isinstance(box, LTTextBoxVertical):
-                    return (0, -box.x1, box.y0)
-                else:
-                    return (1, box.y0, box.x0)
-            textboxes.sort(key=getkey)
-        self._objs = textboxes + otherobjs + empties
+        self._objs = textlines + otherobjs + empties
         return
 
 
